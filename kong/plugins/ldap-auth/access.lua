@@ -33,7 +33,13 @@ end
 local function ldap_authenticate(given_username, given_password, conf)
   local is_authenticated
   local error, suppressed_err, ok
-  local who = conf.attribute.."="..given_username..","..conf.base_dn
+  local who
+
+  if(conf.attribute ~= nil) then
+    who = conf.attribute.."="..given_username..","..conf.base_dn
+  else
+    who = given_username
+  end
 
   local sock = ngx_socket_tcp()
   sock:settimeout(conf.timeout)
